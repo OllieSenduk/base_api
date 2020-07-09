@@ -1,4 +1,4 @@
-FROM python:3.7-apline
+FROM python:3.8-buster
 MAINTAINER Ichi Studios
 
 ENV PYTHONUNBUFFERED 1
@@ -10,5 +10,5 @@ run mkdir /app
 WORKDIR /app
 COPY ./app /app
 
-RUN adduser -D user
+RUN adduser --disabled-login user
 User user
