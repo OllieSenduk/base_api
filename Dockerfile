@@ -1,5 +1,5 @@
 FROM python:3.8-slim-buster
-MAINTAINER Ichi Studios
+LABEL Ichi Studios
 
 ENV PYTHONUNBUFFERED 1
 
