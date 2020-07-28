@@ -18,12 +18,6 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
-        try:
-            # username is None for the AbstractUser option
-            # username does not exist for the AbstractBaseUser option
-            self.assertIsNone(user.username)
-        except AttributeError:
-            pass
 
     def test_new_user_email_normalized_successful(self):
         """Test that the email is normalized"""
@@ -47,3 +41,17 @@ class ModelTests(TestCase):
             User.objects.create_user(email='')
         with self.assertRaises(ValueError):
             User.objects.create_user(email='', password="foo")
+
+    def test_new_user_username_invalid(self):
+        email = "test@test.com"
+        password = "secret"
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password
+        )
+        try:
+            # username is None for the AbstractUser option
+            # username does not exist for the AbstractBaseUser option
+            self.assertIsNone(user.username)
+        except AttributeError:
+            pass
