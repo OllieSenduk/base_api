@@ -6,6 +6,7 @@ class ModelTests(TestCase):
 
     def test_create_user_with_email_successful(self):
         """Test creating new user with email works"""
+        User = get_user_model()
         email = "test@test.com"
         password = "secret"
         user = get_user_model().objects.create_user(
@@ -26,7 +27,7 @@ class ModelTests(TestCase):
             pass
         with self.assertRaises(TypeError):
             User.objects.create_user()
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ValueError):
             User.objects.create_user(email='')
         with self.assertRaises(ValueError):
             User.objects.create_user(email='', password="foo")
