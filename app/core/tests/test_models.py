@@ -6,7 +6,6 @@ class ModelTests(TestCase):
 
     def test_create_user_with_email_successful(self):
         """Test creating new user with email works"""
-        User = get_user_model()
         email = "test@test.com"
         password = "secret"
         user = get_user_model().objects.create_user(
@@ -25,12 +24,6 @@ class ModelTests(TestCase):
             self.assertIsNone(user.username)
         except AttributeError:
             pass
-        with self.assertRaises(TypeError):
-            User.objects.create_user()
-        with self.assertRaises(ValueError):
-            User.objects.create_user(email='')
-        with self.assertRaises(ValueError):
-            User.objects.create_user(email='', password="foo")
 
     def test_new_user_email_normalized_successful(self):
         """Test that the email is normalized"""
@@ -43,3 +36,14 @@ class ModelTests(TestCase):
         )
 
         self.assertEqual(user.email, email.lower())
+
+    def test_new_user_email_invalid(self):
+        """Test email errors"""
+        User = get_user_model()
+
+        with self.assertRaises(TypeError):
+            User.objects.create_user()
+        with self.assertRaises(ValueError):
+            User.objects.create_user(email='')
+        with self.assertRaises(ValueError):
+            User.objects.create_user(email='', password="foo")
