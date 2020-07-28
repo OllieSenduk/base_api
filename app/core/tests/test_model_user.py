@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 
 class UserModelTests(TestCase):
 
-    def test_create_user_with_email_successful(self):
+    def test_create_user_with_email_valid(self):
         """Test creating new user with email works"""
         email = "test@test.com"
         password = "secret"
@@ -19,7 +19,7 @@ class UserModelTests(TestCase):
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
 
-    def test_new_user_email_normalized_successful(self):
+    def test_new_user_email_normalized_valid(self):
         """Test that the email is normalized"""
         email = "test@TEST.com"
         password = "secret"
@@ -55,3 +55,14 @@ class UserModelTests(TestCase):
             self.assertIsNone(user.username)
         except AttributeError:
             pass
+
+    def test_create_super_user_valid(self):
+        email = "admin@test.com"
+        password = "secret"
+        user = get_user_model().objects.create_superuser(
+            email=email,
+            password=password
+        )
+
+        self.assertEqual(user.is_staff, True)
+        self.assertEqual(user.is_superuser, True)

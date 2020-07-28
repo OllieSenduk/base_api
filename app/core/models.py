@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
     PermissionsMixin
 
 # User manager class - helper functions for creating users & super users
-# Used for
 
 
 class UserManager(BaseUserManager):
@@ -17,6 +16,17 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        """"Creates & saves a new superuser"""
+        if not email:
+            raise ValueError("Email must be set")
+        user = self.create_user(email, password)
+        user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
 
         return user
