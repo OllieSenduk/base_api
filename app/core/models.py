@@ -14,6 +14,7 @@ class UserManager(BaseUserManager):
         """"Creates & saves a new user"""
         if not email:
             raise ValueError("Email must be set")
+        email = UserManager.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -23,10 +24,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     """Customize the user model to support email instead of username"""
-    email = models.emailField(max_length=225, unique=True)
+    email = models.EmailField(max_length=225, unique=True)
     first_name = models.CharField(max_length=225)
     last_name = models.CharField(max_length=225)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
     objects = UserManager()
+    USERNAME_FIELD = 'email'
