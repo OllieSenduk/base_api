@@ -31,3 +31,15 @@ class ModelTests(TestCase):
             User.objects.create_user(email='')
         with self.assertRaises(ValueError):
             User.objects.create_user(email='', password="foo")
+
+    def test_new_user_email_normalized_successful(self):
+        """Test that the email is normalized"""
+        email = "test@TEST.com"
+        password = "secret"
+
+        user = get_user_model().objects.create_user(
+            email=email,
+            password=password
+        )
+
+        self.assertEqual(user.email, email.lower())
